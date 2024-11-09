@@ -20,6 +20,8 @@ root_router = APIRouter()
 
 # Cuerpo de la respuesta en la raíz
 @root_router.get("/")
+
+
 def index(request: Request) -> Any:
     """Basic HTML response."""
     body = (
