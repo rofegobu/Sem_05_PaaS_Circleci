@@ -1,38 +1,38 @@
-# This config was automatically generated from your source code
+ This config was automatically generated from your source code
 # Stacks detected: deps:python:bankchurn-api,test:tox:bankchurn-api
 version: 2.1
+
 orbs:
-  python: circleci/python@2
+  python: circleci/python@2.0
+
 jobs:
   test-python:
-    # Install dependencies and run tests
     docker:
       - image: cimg/python:3.10-node
     working_directory: ~/project/bankchurn-api
     steps:
-      - checkout:
-          path: ~/project
-      - python/install-packages
+      - checkout
       - python/install-packages:
-          args: tox
+          pkg-manager: pip
       - run:
           name: Run tests
           command: tox
       - store_test_results:
           path: junit.xml
-  deploy:
-    # This is an example deploy job, not actually used by the workflow
+
+  deploy_app_to_railway:
     docker:
       - image: cimg/base:stable
     steps:
-      # Replace this with steps to deploy to users
+      - checkout
       - run:
-          name: deploy
-          command: '#e.g. ./deploy.sh'
+          name: Deploy to Railway
+          command: railway up --service=splendid-upliftment
+
 workflows:
-  build-and-test:
+  build-and-deploy:
     jobs:
       - test-python
-    # - deploy:
-    #     requires:
-    #       - test-python
+      - deploy_app_to_railway:
+          requires:
+            - test-python
